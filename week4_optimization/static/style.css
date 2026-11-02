@@ -1,0 +1,239 @@
+/* ==================================================================
+   week1_parsing/static/style.css
+   ------------------------------------------------------------------
+   One small stylesheet for the whole app. Plain CSS only - no
+   framework, so you can see exactly what every rule does.
+
+   The same file is copied into weeks 2-4 with a few extra rules for
+   charts, so you only need to learn this structure once.
+   ================================================================== */
+
+/* CSS variables: change these 6 values and the whole theme changes. */
+:root {
+  --bg: #0b1120;          /* page background (very dark navy) */
+  --panel: #131c31;       /* card background */
+  --line: #22304d;        /* borders */
+  --text: #e6ecf7;        /* main text */
+  --muted: #8b9ab5;       /* secondary text */
+  --accent: #38bdf8;      /* sky blue - links, buttons */
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --bad: #ef4444;
+}
+
+/* The universal reset: every element uses border-box sizing, so
+   padding does not make an element wider than we asked for. */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 15% -10%, #16233d 0%, var(--bg) 45%);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ---------------- top navigation ---------------- */
+.topbar {
+  display: flex;                 /* lay children out in a row */
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(11, 17, 32, 0.85);
+  position: sticky;              /* stays visible while scrolling */
+  top: 0;
+  backdrop-filter: blur(8px);
+  z-index: 20;
+}
+
+.brand { font-weight: 700; font-size: 18px; letter-spacing: 0.3px; display: flex; align-items: center; gap: 10px; }
+.logo { color: var(--accent); }
+
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.1);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 18px;
+  font-size: 14px;
+  padding-bottom: 3px;
+  border-bottom: 2px solid transparent;
+}
+nav a:hover { color: var(--text); }
+nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ---------------- layout ---------------- */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 22px;
+}
+
+h1 { font-size: 22px; margin: 0 0 6px; }
+h2 { font-size: 18px; margin: 0 0 14px; }
+h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--muted); margin: 22px 0 10px; }
+.muted { color: var(--muted); }
+.hint { color: var(--muted); font-size: 13px; margin-top: 14px; }
+code { font-family: Consolas, "Courier New", monospace; font-size: 13px; color: #a5d8ff; }
+
+/* ---------------- upload form ---------------- */
+.drop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px dashed var(--line);
+  border-radius: 12px;
+  padding: 34px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: center;
+  color: var(--muted);
+}
+.drop:hover { border-color: var(--accent); background: rgba(56, 189, 248, 0.05); }
+/* Hide the raw file input but keep it clickable through the label. */
+.drop input { display: none; }
+.drop-text { font-size: 14px; }
+
+.btn {
+  margin-top: 16px;
+  background: var(--accent);
+  color: #04121f;
+  border: 0;
+  border-radius: 9px;
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.btn:hover { filter: brightness(1.1); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---------------- statistics ---------------- */
+.stats { display: flex; gap: 14px; flex-wrap: wrap; }
+.stat {
+  flex: 1 1 140px;
+  background: #0e1729;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+}
+.stat .num { font-size: 26px; font-weight: 700; }
+.stat .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; }
+.stat.ok .num { color: var(--ok); }
+.stat.bad .num { color: var(--bad); }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  background: #0e1729;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.chip b { color: var(--text); margin-left: 6px; }
+
+/* ---------------- table ---------------- */
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  background: #0e1729;
+  text-align: left;
+  padding: 10px 12px;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  position: sticky;   /* header stays put while the table scrolls */
+  top: 0;
+}
+tbody td { padding: 8px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+tbody tr:hover { background: rgba(56, 189, 248, 0.05); }
+td.path { max-width: 340px; overflow-wrap: anywhere; color: #c7d6ef; }
+td.agent { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+
+/* status colours, chosen by s2 / s4 / s5 class from the template */
+.status { font-weight: 700; font-family: Consolas, monospace; }
+.s2 { color: var(--ok); }
+.s3 { color: var(--accent); }
+.s4 { color: var(--warn); }
+.s5 { color: var(--bad); }
+
+/* ---------------- alerts ---------------- */
+.alert {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fcd34d;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+
+.errors { margin: 0; padding-left: 20px; color: var(--muted); font-size: 13px; }
+.errors li { margin-bottom: 4px; }
+
+.foot { text-align: center; color: var(--muted); font-size: 12px; padding: 20px; border-top: 1px solid var(--line); }
+
+/* ================= Week 2 additions ================= */
+.row { display: flex; align-items: flex-end; gap: 14px; margin-top: 16px; flex-wrap: wrap; }
+.row.spread { justify-content: space-between; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--muted); }
+.field input { background: #0e1729; border: 1px solid var(--line); border-radius: 8px; color: var(--text); padding: 8px 10px; width: 220px; font-size: 14px; }
+.btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 0; text-decoration: none; display: inline-block; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 720px) { .split { grid-template-columns: 1fr; } }
+.table-scroll.tall { max-height: 520px; overflow-y: auto; }
+.stat.warn .num { color: var(--warn); }
+.sev-critical { color: #f472b6; font-weight: 600; }
+.sev-high { color: var(--bad); font-weight: 600; }
+.sev-medium { color: var(--warn); font-weight: 600; }
+.sev-low { color: var(--accent); font-weight: 600; }
+
+/* ================= Week 3 additions (dashboard) ================= */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 22px; }
+@media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+.chart-box { position: relative; height: 300px; }
+.map { height: 300px; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.chart-empty { color: var(--muted); font-size: 13px; text-align: center; padding: 90px 20px; margin: 0; }
+.link { color: var(--accent); text-decoration: none; }
+.bars { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.bars li { display: grid; grid-template-columns: 1fr 120px 40px; align-items: center; gap: 10px; font-size: 13px; }
+.bars li code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bars .bar { height: 8px; border-radius: 999px; background: linear-gradient(90deg, var(--accent), #6366f1); width: var(--w); max-width: 100%; display: block; }
+.bars b { text-align: right; }
+
+/* ================= Week 4 additions (queue + export) ================= */
+.progress-panel { margin-top: 20px; }
+.progress-head { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.progress-track { height: 10px; background: #0e1729; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), #6366f1); transition: width 0.25s ease; }
+.pill { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.pill-done { color: var(--ok); border-color: rgba(34, 197, 94, 0.4); background: rgba(34, 197, 94, 0.1); }
+.pill-running, .pill-queued { color: var(--accent); border-color: rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.1); }
+.pill-error { color: var(--bad); border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.1); }
+.drop.dragging { border-color: var(--accent); background: rgba(56, 189, 248, 0.12); }
+.steps { margin: 0; padding-left: 22px; color: var(--muted); font-size: 14px; }
+.steps li { margin-bottom: 6px; }
+.steps b { color: var(--text); }

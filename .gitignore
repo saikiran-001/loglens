@@ -1,0 +1,28 @@
+# Byte-code and caches
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Uploaded / generated files (never commit user logs or reports)
+week1_parsing/uploads/
+week2_detection/uploads/
+week3_visualization/uploads/
+week3_visualization/reports/
+week4_optimization/uploads/
+week4_optimization/reports/
+
+# GeoIP database (large, download it yourself - see week3/README.md)
+*.mmdb
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Generated performance-test log (regenerate with tools/make_large_log.py)
+demo_logs/large_access.log

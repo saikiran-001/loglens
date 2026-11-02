@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!--
+  week4_optimization/templates/dashboard.html
+  ------------------------------------------------------------------
+  Same dashboard as Week 3, plus:
+    * export buttons (JSON / CSV)
+    * processing time + engine metadata
+    * "new analysis" link back to the job queue
+
+  The chart code in static/dashboard.js is unchanged - proof that the
+  report shape stayed stable while the engine underneath it changed.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LogLens · Report {{ report.meta.report_id }}</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◉</span> LogLens
+      <span class="badge">Report</span>
+    </div>
+    <nav>
+      <a href="{{ url_for('index') }}">← New analysis</a>
+      <a href="{{ url_for('export_json', report_id=report.meta.report_id) }}">Export JSON</a>
+      <a href="{{ url_for('export_csv', report_id=report.meta.report_id) }}">Export CSV</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+
+    <section class="card">
+      <h1>{{ report.meta.filename }}</h1>
+      <p class="muted">
+        Report <code>{{ report.meta.report_id }}</code> ·
+        {{ report.summary.total_lines }} lines ·
+        {{ report.summary.parsed_records }} parsed ·
+        {{ report.summary.unparsed_lines }} unparsed ·
+        processed in {{ report.meta.elapsed_seconds }}s
+        ({{ report.meta.engine }} parser)
+      </p>
+
+      <div class="stats">
+        <div class="stat"><span class="num">{{ report.summary.parsed_records }}</span><span class="label">requests</span></div>
+        <div class="stat bad"><span class="num">{{ report.summary.attack_requests }}</span><span class="label">malicious</span></div>
+        <div class="stat bad"><span class="num">{{ report.summary.incidents }}</span><span class="label">incidents</span></div>
+        <div class="stat warn"><span class="num">{{ report.summary.brute_force_ips }}</span><span class="label">brute-force IPs</span></div>
+        <div class="stat"><span class="num">{{ report.by_country | length }}</span><span class="label">countries</span></div>
+      </div>
+
+      <div class="table-scroll" style="margin-top: 18px;">
+        <table>
+          <thead><tr><th>Severity</th><th>Count</th></tr></thead>
+          <tbody>
+            {% for severity in ["critical", "high", "medium", "low"] %}
+              {% if report.summary.by_severity.get(severity) %}
+              <tr>
+                <td><span class="sev-{{ severity }}">{{ severity }}</span></td>
+                <td>{{ report.summary.by_severity.get(severity) }}</td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <div class="card">
+        <h3>Attacks per hour</h3>
+        <div class="chart-box"><canvas id="timelineChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Attack types</h3>
+        <div class="chart-box"><canvas id="typeChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <div class="card">
+        <h3>Attacker locations</h3>
+        <div id="attackMap" class="map"></div>
+        <p class="hint">Marker size = attacks. Private / unknown IPs are not plotted.</p>
+      </div>
+      <div class="card">
+        <h3>Attacks by country</h3>
+        <div class="chart-box"><canvas id="countryChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Top attackers</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>IP</th><th>Country</th><th>City</th><th>Hits</th><th>Worst</th><th>Techniques</th></tr></thead>
+          <tbody>
+            {% for row in report.top_attackers %}
+            <tr>
+              <td class="muted">{{ loop.index }}</td>
+              <td><code>{{ row.ip }}</code></td>
+              <td>{{ row.flag }} {{ row.country }}</td>
+              <td class="muted">{{ row.city or "-" }}</td>
+              <td><b>{{ row.hits }}</b></td>
+              <td><span class="sev-{{ row.worst_severity }}">{{ row.worst_severity }}</span></td>
+              <td class="muted">{{ row.attack_types.keys() | join(", ") }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="muted">No attacks detected.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {% if report.brute_force %}
+    <section class="card">
+      <h3>Brute-force authentication</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>IP</th><th>Country</th><th>Failed logins</th><th>Targets</th></tr></thead>
+          <tbody>
+            {% for alert in report.brute_force %}
+            <tr>
+              <td><code>{{ alert.ip }}</code></td>
+              <td>{{ alert.flag }} {{ alert.country }}</td>
+              <td class="sev-high">{{ alert.failed_attempts }}</td>
+              <td class="muted">{{ alert.target_paths | join(", ") }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="grid-2">
+      <div class="card">
+        <h3>Most targeted URLs</h3>
+        <ul class="bars">
+          {% for row in report.most_targeted %}
+          <li>
+            <code>{{ row.path }}</code>
+            <span class="bar" style="--w: {{ (row.hits / report.most_targeted[0].hits * 100) | round(0) }}%"></span>
+            <b>{{ row.hits }}</b>
+          </li>
+          {% else %}
+          <li class="muted">Nothing targeted.</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Rule hits</h3>
+        <ul class="bars">
+          {% for attack_type, count in report.summary.by_type.items() %}
+          <li>
+            <span>{{ attack_type }}</span>
+            <span class="bar" style="--w: {{ (count / report.summary.incidents * 100) | round(0) }}%"></span>
+            <b>{{ count }}</b>
+          </li>
+          {% else %}
+          <li class="muted">No rules fired.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Incident detail <span class="muted">({{ report.incidents | length }} total, showing 100)</span></h3>
+      <div class="table-scroll tall">
+        <table>
+          <thead><tr><th>Line</th><th>Time</th><th>IP</th><th>Rule</th><th>Type</th><th>Severity</th><th>Payload</th></tr></thead>
+          <tbody>
+            {% for incident in report.incidents[:100] %}
+            <tr>
+              <td class="muted">{{ incident.line }}</td>
+              <td class="muted">{{ (incident.timestamp or "")[11:19] }}</td>
+              <td><code>{{ incident.ip }}</code></td>
+              <td class="muted">{{ incident.signature_id }}</td>
+              <td>{{ incident.type }}</td>
+              <td><span class="sev-{{ incident.severity }}">{{ incident.severity }}</span></td>
+              <td class="path">{{ incident.payload }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="muted">Nothing matched. Clean log.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {% if report.errors %}
+    <section class="card">
+      <h3>Unparsed lines <span class="muted">({{ report.summary.unparsed_lines }} total, showing {{ report.errors | length }})</span></h3>
+      <ul class="errors">
+        {% for error in report.errors %}
+          <li><b>line {{ error.line }}</b> — {{ error.text[:140] }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+  </main>
+
+  <footer class="foot">
+    LogLens · Week 4 of 4 · streaming parser · async job queue · export
+  </footer>
+
+  <script id="report-data" type="application/json">{{ report | tojson }}</script>
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

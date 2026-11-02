@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!--
+  week2_detection/templates/index.html
+  ------------------------------------------------------------------
+  Same upload page as Week 1, but the result block now shows FINDINGS
+  from the detection engine instead of a raw parsed table.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LogLens · Week 2 · Detection</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◉</span> LogLens
+      <span class="badge">Week 2 · Detection</span>
+    </div>
+    <nav>
+      <a href="http://127.0.0.1:5001">1 Parser</a>
+      <a class="active" href="http://127.0.0.1:5002">2 Detection</a>
+      <a href="http://127.0.0.1:5003">3 Dashboard</a>
+      <a href="http://127.0.0.1:5004">4 Final</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}{% for message in messages %}<div class="alert">{{ message }}</div>{% endfor %}{% endif %}
+    {% endwith %}
+
+    <!-- ---------------- Upload ---------------- -->
+    <section class="card">
+      <h1>2 · Detect attacks</h1>
+      <p class="muted">
+        The parsed request path and User-Agent are matched against
+        <code>signatures.json</code>. Failed logins are counted per IP.
+      </p>
+
+      <form action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
+        <label class="drop" for="logfile">
+          <input id="logfile" type="file" name="logfile" accept=".log,.txt" />
+          <span class="drop-text">Choose a .log file</span>
+        </label>
+
+        <!-- Brute-force sensitivity: a lower number = easier to alert. -->
+        <div class="row">
+          <label class="field">
+            <span>Brute-force threshold (failed logins per IP)</span>
+            <input type="number" name="threshold" min="2" max="100" value="{{ threshold }}" />
+          </label>
+          <button type="submit" class="btn">Analyse</button>
+        </div>
+      </form>
+
+      <div class="row spread">
+        <p class="hint">No file? Try the bundled attack log.</p>
+        <a class="btn ghost" href="{{ url_for('demo') }}">Load demo log</a>
+      </div>
+    </section>
+
+    <!-- ---------------- Results ---------------- -->
+    {% if result %}
+    {% set s = result.report.summary %}
+    <section class="card">
+      <h2>Findings · {{ result.filename }}</h2>
+
+      <div class="stats">
+        <div class="stat"><span class="num">{{ s.total_lines }}</span><span class="label">lines</span></div>
+        <div class="stat"><span class="num">{{ s.parsed_records }}</span><span class="label">parsed</span></div>
+        <div class="stat bad"><span class="num">{{ s.attack_requests }}</span><span class="label">malicious requests</span></div>
+        <div class="stat bad"><span class="num">{{ s.incidents }}</span><span class="label">incidents</span></div>
+        <div class="stat warn"><span class="num">{{ s.brute_force_ips }}</span><span class="label">brute-force IPs</span></div>
+      </div>
+
+      <div class="split">
+        <!-- Severity distribution -->
+        <div>
+          <h3>By severity</h3>
+          <div class="chips">
+            {% for severity, count in s.by_severity.items() %}
+              <span class="chip sev-{{ severity }}">{{ severity }} <b>{{ count }}</b></span>
+            {% endfor %}
+            {% if not s.by_severity %}<span class="muted">none</span>{% endif %}
+          </div>
+        </div>
+
+        <!-- Attack type distribution -->
+        <div>
+          <h3>By attack type</h3>
+          <div class="chips">
+            {% for attack_type, count in s.by_type.items() %}
+              <span class="chip">{{ attack_type }} <b>{{ count }}</b></span>
+            {% endfor %}
+            {% if not s.by_type %}<span class="muted">none</span>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Top attackers table -->
+      <h3>Top attackers</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>IP</th><th>Hits</th><th>Worst severity</th><th>Techniques</th><th>First seen</th><th>Last seen</th></tr>
+          </thead>
+          <tbody>
+            {% for row in result.report.top_attackers %}
+            <tr>
+              <td><code>{{ row.ip }}</code></td>
+              <td><b>{{ row.hits }}</b></td>
+              <td><span class="sev-{{ row.worst_severity }}">{{ row.worst_severity }}</span></td>
+              <td class="muted">{{ row.attack_types.keys() | join(", ") }}</td>
+              <td class="muted">{{ row.first_seen or "-" }}</td>
+              <td class="muted">{{ row.last_seen or "-" }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" class="muted">No attacks detected.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Brute force -->
+      {% if result.report.brute_force %}
+      <h3>Brute-force authentication</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>IP</th><th>Failed logins</th><th>Threshold</th><th>Targets</th></tr></thead>
+          <tbody>
+            {% for alert in result.report.brute_force %}
+            <tr>
+              <td><code>{{ alert.ip }}</code></td>
+              <td class="sev-high">{{ alert.failed_attempts }}</td>
+              <td class="muted">{{ alert.threshold }}</td>
+              <td class="muted">{{ alert.target_paths | join(", ") }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+      <!-- Every individual incident -->
+      <h3>Incident detail <span class="muted">({{ result.report.incidents | length }} rows)</span></h3>
+      <div class="table-scroll tall">
+        <table>
+          <thead>
+            <tr><th>Line</th><th>Time</th><th>IP</th><th>Rule</th><th>Type</th><th>Severity</th><th>Payload</th></tr>
+          </thead>
+          <tbody>
+            {% for incident in result.report.incidents %}
+            <tr>
+              <td class="muted">{{ incident.line }}</td>
+              <td class="muted">{{ (incident.timestamp or "")[11:19] }}</td>
+              <td><code>{{ incident.ip }}</code></td>
+              <td class="muted">{{ incident.signature_id }}</td>
+              <td>{{ incident.type }}</td>
+              <td><span class="sev-{{ incident.severity }}">{{ incident.severity }}</span></td>
+              <td class="path">{{ incident.payload }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="muted">Nothing matched. Clean log.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% endif %}
+  </main>
+
+  <footer class="foot">LogLens · Week 2 of 4 · signatures.json + detector.py + aggregator.py</footer>
+</body>
+</html>

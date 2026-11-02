@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+  week4_optimization/templates/job.html
+  ------------------------------------------------------------------
+  No-JavaScript fallback. If you open /job/<id> directly, this page
+  refreshes itself every 2 seconds using a <meta http-equiv="refresh">.
+
+  Once the job is done, Flask's /job route redirects straight to the
+  report, so this page is only ever seen while work is in progress.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- The poor-man's polling: reload this URL every 2 seconds. -->
+  <meta http-equiv="refresh" content="2" />
+  <title>LogLens · Job {{ job.id }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">◉</span> LogLens <span class="badge">Processing</span></div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h1>{{ job.filename }}</h1>
+      <p class="muted">Job <code>{{ job.id }}</code> · status <b>{{ job.status }}</b></p>
+
+      <div class="progress-panel">
+        <div class="progress-head">
+          <span>{{ job.message }}</span>
+          <span>{{ job.progress }}%</span>
+        </div>
+        <div class="progress-track">
+          <!-- Jinja prints the width inline; no JS needed. -->
+          <div class="progress-bar" style="width: {{ job.progress }}%"></div>
+        </div>
+      </div>
+
+      <p class="hint">This page refreshes automatically. For the live version use the main page.</p>
+    </section>
+  </main>
+</body>
+</html>

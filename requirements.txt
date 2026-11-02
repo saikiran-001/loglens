@@ -1,0 +1,17 @@
+# ---------------------------------------------------------------
+# LogLens dependencies
+# ---------------------------------------------------------------
+# Install everything with:   python -m pip install -r requirements.txt
+#
+# Weeks 1 and 2 have a command-line version that needs ZERO packages
+# (only the Python standard library). Flask is only needed for the
+# web apps in weeks 1-4.
+# ---------------------------------------------------------------
+
+Flask>=3.0
+
+# OPTIONAL - real GeoIP lookups in weeks 3 and 4.
+# You also need a MaxMind "GeoLite2-City.mmdb" file in week3/data/ or
+# week4/data/. Without it the project falls back to a built-in demo
+# table, so this is safe to leave out.
+maxminddb>=2.5
