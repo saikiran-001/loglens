@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--
+  week1_parsing/templates/index.html
+  ------------------------------------------------------------------
+  The Week 1 page: upload a log file, then look at what the parser
+  understood. Jinja2 (Flask's template engine) handles the dynamic
+  parts, using double curly braces to print a value and curly-percent
+  blocks for if/for statements. Everything inside those markers is
+  evaluated by the SERVER before the page is sent, so the browser
+  only ever receives plain HTML.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LogLens · Week 1 · Parser</title>
+
+  <!-- url_for('static', filename=...) builds /static/style.css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <!-- ---------------- Header ---------------- -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◉</span> LogLens
+      <span class="badge">Week 1 · Parsing</span>
+    </div>
+    <nav>
+      <!-- Links to the other weeks' apps (start them separately) -->
+      <a class="active" href="http://127.0.0.1:5001">1 Parser</a>
+      <a href="http://127.0.0.1:5002">2 Detection</a>
+      <a href="http://127.0.0.1:5003">3 Dashboard</a>
+      <a href="http://127.0.0.1:5004">4 Final</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ---------------- Flash messages ---------------- -->
+    <!-- get_flashed_messages() returns and clears one-time notices. -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- ---------------- Upload card ---------------- -->
+    <section class="card">
+      <h1>1 · Parse a web server log</h1>
+      <p class="muted">
+        Upload an Apache/Nginx access log. This week only <strong>structures</strong> the file -
+        attack detection arrives in Week 2.
+      </p>
+
+      <!--
+        action="/upload"  -> POST to the /upload route in app.py
+        method="post"     -> we are sending data, not just asking for a page
+        enctype=...       -> REQUIRED for file uploads; without it the
+                             browser sends only the file NAME, not the bytes
+      -->
+      <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <label class="drop" for="logfile">
+          <input id="logfile" type="file" name="logfile" accept=".log,.txt" required />
+          <span class="drop-text">Choose a .log file — or drag it onto this box</span>
+        </label>
+        <button type="submit" class="btn">Parse file</button>
+      </form>
+
+      <p class="hint">
+        No log handy? Use the bundled file, or click below.
+      </p>
+      <a class="btn ghost" href="{{ url_for('demo') }}">Load demo log</a>
+    </section>
+
+    <!-- ---------------- Results (only when result is not None) ---------------- -->
+    {% if result %}
+    <section class="card">
+      <h2>Result · {{ result.filename }}</h2>
+
+      <div class="stats">
+        <div class="stat"><span class="num">{{ result.total_lines }}</span><span class="label">lines read</span></div>
+        <div class="stat ok"><span class="num">{{ result.parsed }}</span><span class="label">parsed</span></div>
+        <div class="stat bad"><span class="num">{{ result.failed }}</span><span class="label">failed</span></div>
+      </div>
+
+      <!-- Status code breakdown, built from the Counter in app.py -->
+      <h3>HTTP status codes</h3>
+      <div class="chips">
+        {% for status, count in result.status_counts.items() %}
+          <span class="chip">{{ status }} <b>{{ count }}</b></span>
+        {% endfor %}
+      </div>
+
+      <!-- Preview table: first 100 parsed records -->
+      <h3>Parsed records <span class="muted">(first 100)</span></h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>IP</th><th>Time</th><th>Method</th>
+              <th>Path</th><th>Status</th><th>Bytes</th><th>User-Agent</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in result.preview %}
+            <tr>
+              <td class="muted">{{ row.line_number }}</td>
+              <td><code>{{ row.ip }}</code></td>
+              <td class="muted">{{ row.time_raw }}</td>
+              <td>{{ row.method }}</td>
+              <td class="path">{{ row.path }}</td>
+              <td>
+                <!-- Colour the status: 2xx green, 3xx blue, 4xx orange, 5xx red -->
+                <span class="status s{{ row.status // 100 }}">{{ row.status }}</span>
+              </td>
+              <td>{{ row.size }}</td>
+              <td class="agent">{{ row.user_agent or "-" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Show a few of the lines that could not be parsed -->
+      {% if result.errors %}
+      <h3>Unparsed lines</h3>
+      <ul class="errors">
+        {% for line_number, text in result.errors %}
+          <li><b>line {{ line_number }}</b> — {{ text }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </section>
+    {% endif %}
+  </main>
+
+  <footer class="foot">LogLens · Week 1 of 4 · parser.py + Flask upload API</footer>
+</body>
+</html>

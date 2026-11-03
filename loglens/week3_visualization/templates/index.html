@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--
+  week3_visualization/templates/index.html
+  ------------------------------------------------------------------
+  Launch page for Week 3: upload a log (or use the demo), then you are
+  redirected to the dashboard. Also lists reports already in memory.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LogLens · Week 3 · Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◉</span> LogLens
+      <span class="badge">Week 3 · Visualization</span>
+    </div>
+    <nav>
+      <a href="http://127.0.0.1:5001">1 Parser</a>
+      <a href="http://127.0.0.1:5002">2 Detection</a>
+      <a class="active" href="http://127.0.0.1:5003">3 Dashboard</a>
+      <a href="http://127.0.0.1:5004">4 Final</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}{% for message in messages %}<div class="alert">{{ message }}</div>{% endfor %}{% endif %}
+    {% endwith %}
+
+    <section class="card">
+      <h1>3 · Visualise the attacks</h1>
+      <p class="muted">
+        Parses, detects, then draws a timeline, a country breakdown and a
+        world map. GeoIP uses MaxMind when
+        <code>week3_visualization/data/GeoLite2-City.mmdb</code> exists,
+        otherwise a built-in demo table.
+      </p>
+
+      <form action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
+        <label class="drop" for="logfile">
+          <input id="logfile" type="file" name="logfile" accept=".log,.txt" />
+          <span class="drop-text">Choose a .log file</span>
+        </label>
+        <div class="row">
+          <label class="field">
+            <span>Brute-force threshold</span>
+            <input type="number" name="threshold" min="2" max="100" value="{{ 5 }}" />
+          </label>
+          <button type="submit" class="btn">Analyse &amp; open dashboard</button>
+        </div>
+      </form>
+
+      <div class="row spread">
+        <p class="hint">No log handy? The bundled file contains SQLi, XSS, traversal, brute force and scanners.</p>
+        <a class="btn ghost" href="{{ url_for('demo') }}">Load demo log</a>
+      </div>
+    </section>
+
+    {% if recent %}
+    <section class="card">
+      <h2>Recent reports <span class="muted">(in memory)</span></h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Report</th><th>File</th><th>Incidents</th><th>Malicious requests</th><th></th></tr></thead>
+          <tbody>
+            {% for item in recent %}
+            <tr>
+              <td><code>{{ item.id }}</code></td>
+              <td>{{ item.filename }}</td>
+              <td>{{ item.incidents }}</td>
+              <td>{{ item.attacks }}</td>
+              <td><a class="link" href="{{ url_for('report_view', report_id=item.id) }}">Open →</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% endif %}
+  </main>
+
+  <footer class="foot">LogLens · Week 3 of 4 · Chart.js timeline + country breakdown + Leaflet map</footer>
+</body>
+</html>

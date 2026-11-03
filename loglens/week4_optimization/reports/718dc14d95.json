@@ -1,0 +1,1348 @@
+{
+  "summary": {
+    "total_lines": 79,
+    "parsed_records": 78,
+    "unparsed_lines": 1,
+    "attack_requests": 35,
+    "clean_requests": 43,
+    "incidents": 59,
+    "brute_force_ips": 2,
+    "by_severity": {
+      "critical": 13,
+      "medium": 16,
+      "high": 12,
+      "low": 18
+    },
+    "by_type": {
+      "sql_injection": 12,
+      "scanner": 32,
+      "xss": 3,
+      "path_traversal": 12
+    }
+  },
+  "incidents": [
+    {
+      "line": 6,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T03:00:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1'%20OR%20'1'='1",
+      "status": 200,
+      "signature_id": "SQLI-001",
+      "signature_name": "SQL injection - tautology",
+      "type": "sql_injection",
+      "severity": "critical",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1' OR '1'='1"
+    },
+    {
+      "line": 6,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T03:00:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1'%20OR%20'1'='1",
+      "status": 200,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 7,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T03:07:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1'%20OR%20'1'='1",
+      "status": 200,
+      "signature_id": "SQLI-001",
+      "signature_name": "SQL injection - tautology",
+      "type": "sql_injection",
+      "severity": "critical",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1' OR '1'='1"
+    },
+    {
+      "line": 7,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T03:07:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1'%20OR%20'1'='1",
+      "status": 200,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 8,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T03:14:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1';%20DROP%20TABLE%20users;--",
+      "status": 200,
+      "signature_id": "SQLI-003",
+      "signature_name": "SQL injection - stacked query",
+      "type": "sql_injection",
+      "severity": "critical",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1'; DROP TABLE users;--"
+    },
+    {
+      "line": 8,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T03:14:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1';%20DROP%20TABLE%20users;--",
+      "status": 200,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 9,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T03:21:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20UNION%20SELECT%20username,password%20FROM%20users",
+      "status": 500,
+      "signature_id": "SQLI-002",
+      "signature_name": "SQL injection - UNION SELECT",
+      "type": "sql_injection",
+      "severity": "critical",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1 UNION SELECT username,password FROM users"
+    },
+    {
+      "line": 9,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T03:21:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20UNION%20SELECT%20username,password%20FROM%20users",
+      "status": 500,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 11,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T04:00:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "status": 200,
+      "signature_id": "SQLI-004",
+      "signature_name": "SQL injection - time based",
+      "type": "sql_injection",
+      "severity": "high",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1 AND SLEEP(5)"
+    },
+    {
+      "line": 11,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T04:00:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "status": 200,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 12,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T04:07:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20UNION%20SELECT%20username,password%20FROM%20users",
+      "status": 500,
+      "signature_id": "SQLI-002",
+      "signature_name": "SQL injection - UNION SELECT",
+      "type": "sql_injection",
+      "severity": "critical",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1 UNION SELECT username,password FROM users"
+    },
+    {
+      "line": 12,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T04:07:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20UNION%20SELECT%20username,password%20FROM%20users",
+      "status": 500,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 13,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T04:14:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20UNION%20SELECT%20username,password%20FROM%20users",
+      "status": 500,
+      "signature_id": "SQLI-002",
+      "signature_name": "SQL injection - UNION SELECT",
+      "type": "sql_injection",
+      "severity": "critical",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1 UNION SELECT username,password FROM users"
+    },
+    {
+      "line": 13,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T04:14:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20UNION%20SELECT%20username,password%20FROM%20users",
+      "status": 500,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 14,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T04:21:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "status": 200,
+      "signature_id": "SQLI-004",
+      "signature_name": "SQL injection - time based",
+      "type": "sql_injection",
+      "severity": "high",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1 AND SLEEP(5)"
+    },
+    {
+      "line": 14,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T04:21:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "status": 200,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 17,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T05:00:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1'%20OR%20'1'='1",
+      "status": 200,
+      "signature_id": "SQLI-001",
+      "signature_name": "SQL injection - tautology",
+      "type": "sql_injection",
+      "severity": "critical",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1' OR '1'='1"
+    },
+    {
+      "line": 17,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T05:00:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1'%20OR%20'1'='1",
+      "status": 200,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 18,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T05:07:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "status": 500,
+      "signature_id": "SQLI-004",
+      "signature_name": "SQL injection - time based",
+      "type": "sql_injection",
+      "severity": "high",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1 AND SLEEP(5)"
+    },
+    {
+      "line": 18,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T05:07:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "status": 500,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 19,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T05:14:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "status": 500,
+      "signature_id": "SQLI-004",
+      "signature_name": "SQL injection - time based",
+      "type": "sql_injection",
+      "severity": "high",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1 AND SLEEP(5)"
+    },
+    {
+      "line": 19,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T05:14:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "status": 500,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 20,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T05:21:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "status": 200,
+      "signature_id": "SQLI-004",
+      "signature_name": "SQL injection - time based",
+      "type": "sql_injection",
+      "severity": "high",
+      "cwe": "CWE-89",
+      "payload": "/product.php?id=1 AND SLEEP(5)"
+    },
+    {
+      "line": 20,
+      "ip": "45.155.205.233",
+      "timestamp": "2026-10-20T05:21:00+00:00",
+      "method": "GET",
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "status": 200,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    {
+      "line": 25,
+      "ip": "103.21.244.12",
+      "timestamp": "2026-10-20T08:42:00+00:00",
+      "method": "GET",
+      "path": "/search?q=javascript:alert(document.cookie)",
+      "status": 200,
+      "signature_id": "XSS-003",
+      "signature_name": "Cross-site scripting - javascript: URI",
+      "type": "xss",
+      "severity": "medium",
+      "cwe": "CWE-79",
+      "payload": "/search?q=javascript:alert(document.cookie)"
+    },
+    {
+      "line": 27,
+      "ip": "103.21.244.12",
+      "timestamp": "2026-10-20T09:07:00+00:00",
+      "method": "GET",
+      "path": "/search?q=javascript:alert(document.cookie)",
+      "status": 200,
+      "signature_id": "XSS-003",
+      "signature_name": "Cross-site scripting - javascript: URI",
+      "type": "xss",
+      "severity": "medium",
+      "cwe": "CWE-79",
+      "payload": "/search?q=javascript:alert(document.cookie)"
+    },
+    {
+      "line": 30,
+      "ip": "103.21.244.12",
+      "timestamp": "2026-10-20T10:26:00+00:00",
+      "method": "GET",
+      "path": "/search?q=<script>alert('xss')</script>",
+      "status": 200,
+      "signature_id": "XSS-001",
+      "signature_name": "Cross-site scripting - script tag",
+      "type": "xss",
+      "severity": "high",
+      "cwe": "CWE-79",
+      "payload": "/search?q=<script>alert('xss')</script>"
+    },
+    {
+      "line": 35,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T12:47:00+00:00",
+      "method": "GET",
+      "path": "/download?file=../../../../etc/passwd",
+      "status": 403,
+      "signature_id": "TRAV-002",
+      "signature_name": "Path traversal - sensitive file",
+      "type": "path_traversal",
+      "severity": "critical",
+      "cwe": "CWE-22",
+      "payload": "/download?file=../../../../etc/passwd"
+    },
+    {
+      "line": 35,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T12:47:00+00:00",
+      "method": "GET",
+      "path": "/download?file=../../../../etc/passwd",
+      "status": 403,
+      "signature_id": "TRAV-001",
+      "signature_name": "Path traversal - dot-dot-slash",
+      "type": "path_traversal",
+      "severity": "high",
+      "cwe": "CWE-22",
+      "payload": "/download?file=../../../../etc/passwd"
+    },
+    {
+      "line": 35,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T12:47:00+00:00",
+      "method": "GET",
+      "path": "/download?file=../../../../etc/passwd",
+      "status": 403,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "Mozilla/5.0 (X11; Linux x86_64) curl/8.4.0"
+    },
+    {
+      "line": 36,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T12:22:00+00:00",
+      "method": "GET",
+      "path": "/download?file=..%2f..%2f..%2fetc%2fpasswd",
+      "status": 403,
+      "signature_id": "TRAV-002",
+      "signature_name": "Path traversal - sensitive file",
+      "type": "path_traversal",
+      "severity": "critical",
+      "cwe": "CWE-22",
+      "payload": "/download?file=../../../etc/passwd"
+    },
+    {
+      "line": 36,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T12:22:00+00:00",
+      "method": "GET",
+      "path": "/download?file=..%2f..%2f..%2fetc%2fpasswd",
+      "status": 403,
+      "signature_id": "TRAV-001",
+      "signature_name": "Path traversal - dot-dot-slash",
+      "type": "path_traversal",
+      "severity": "high",
+      "cwe": "CWE-22",
+      "payload": "/download?file=../../../etc/passwd"
+    },
+    {
+      "line": 36,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T12:22:00+00:00",
+      "method": "GET",
+      "path": "/download?file=..%2f..%2f..%2fetc%2fpasswd",
+      "status": 403,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "Mozilla/5.0 (X11; Linux x86_64) curl/8.4.0"
+    },
+    {
+      "line": 37,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T12:52:00+00:00",
+      "method": "GET",
+      "path": "/download?file=....//....//windows/win.ini",
+      "status": 403,
+      "signature_id": "TRAV-002",
+      "signature_name": "Path traversal - sensitive file",
+      "type": "path_traversal",
+      "severity": "critical",
+      "cwe": "CWE-22",
+      "payload": "/download?file=....//....//windows/win.ini"
+    },
+    {
+      "line": 37,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T12:52:00+00:00",
+      "method": "GET",
+      "path": "/download?file=....//....//windows/win.ini",
+      "status": 403,
+      "signature_id": "TRAV-001",
+      "signature_name": "Path traversal - dot-dot-slash",
+      "type": "path_traversal",
+      "severity": "high",
+      "cwe": "CWE-22",
+      "payload": "/download?file=....//....//windows/win.ini"
+    },
+    {
+      "line": 37,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T12:52:00+00:00",
+      "method": "GET",
+      "path": "/download?file=....//....//windows/win.ini",
+      "status": 403,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "Mozilla/5.0 (X11; Linux x86_64) curl/8.4.0"
+    },
+    {
+      "line": 40,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T13:07:00+00:00",
+      "method": "GET",
+      "path": "/download?file=../../../../etc/passwd",
+      "status": 403,
+      "signature_id": "TRAV-002",
+      "signature_name": "Path traversal - sensitive file",
+      "type": "path_traversal",
+      "severity": "critical",
+      "cwe": "CWE-22",
+      "payload": "/download?file=../../../../etc/passwd"
+    },
+    {
+      "line": 40,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T13:07:00+00:00",
+      "method": "GET",
+      "path": "/download?file=../../../../etc/passwd",
+      "status": 403,
+      "signature_id": "TRAV-001",
+      "signature_name": "Path traversal - dot-dot-slash",
+      "type": "path_traversal",
+      "severity": "high",
+      "cwe": "CWE-22",
+      "payload": "/download?file=../../../../etc/passwd"
+    },
+    {
+      "line": 40,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T13:07:00+00:00",
+      "method": "GET",
+      "path": "/download?file=../../../../etc/passwd",
+      "status": 403,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "Mozilla/5.0 (X11; Linux x86_64) curl/8.4.0"
+    },
+    {
+      "line": 41,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T13:16:00+00:00",
+      "method": "GET",
+      "path": "/download?file=..%2f..%2f..%2fetc%2fpasswd",
+      "status": 403,
+      "signature_id": "TRAV-002",
+      "signature_name": "Path traversal - sensitive file",
+      "type": "path_traversal",
+      "severity": "critical",
+      "cwe": "CWE-22",
+      "payload": "/download?file=../../../etc/passwd"
+    },
+    {
+      "line": 41,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T13:16:00+00:00",
+      "method": "GET",
+      "path": "/download?file=..%2f..%2f..%2fetc%2fpasswd",
+      "status": 403,
+      "signature_id": "TRAV-001",
+      "signature_name": "Path traversal - dot-dot-slash",
+      "type": "path_traversal",
+      "severity": "high",
+      "cwe": "CWE-22",
+      "payload": "/download?file=../../../etc/passwd"
+    },
+    {
+      "line": 41,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T13:16:00+00:00",
+      "method": "GET",
+      "path": "/download?file=..%2f..%2f..%2fetc%2fpasswd",
+      "status": 403,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "Mozilla/5.0 (X11; Linux x86_64) curl/8.4.0"
+    },
+    {
+      "line": 42,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T13:13:00+00:00",
+      "method": "GET",
+      "path": "/download?file=....//....//windows/win.ini",
+      "status": 403,
+      "signature_id": "TRAV-002",
+      "signature_name": "Path traversal - sensitive file",
+      "type": "path_traversal",
+      "severity": "critical",
+      "cwe": "CWE-22",
+      "payload": "/download?file=....//....//windows/win.ini"
+    },
+    {
+      "line": 42,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T13:13:00+00:00",
+      "method": "GET",
+      "path": "/download?file=....//....//windows/win.ini",
+      "status": 403,
+      "signature_id": "TRAV-001",
+      "signature_name": "Path traversal - dot-dot-slash",
+      "type": "path_traversal",
+      "severity": "high",
+      "cwe": "CWE-22",
+      "payload": "/download?file=....//....//windows/win.ini"
+    },
+    {
+      "line": 42,
+      "ip": "185.220.101.7",
+      "timestamp": "2026-10-20T13:13:00+00:00",
+      "method": "GET",
+      "path": "/download?file=....//....//windows/win.ini",
+      "status": 403,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "Mozilla/5.0 (X11; Linux x86_64) curl/8.4.0"
+    },
+    {
+      "line": 48,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:00:00+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 49,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:00:20+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 50,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:01:00+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 51,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:01:20+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 52,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:02:00+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 53,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:02:20+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 54,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:03:00+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 55,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:03:20+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 56,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:04:00+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 57,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:04:20+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 58,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:05:00+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 59,
+      "ip": "203.0.113.50",
+      "timestamp": "2026-10-20T16:05:20+00:00",
+      "method": "POST",
+      "path": "/login.php",
+      "status": 401,
+      "signature_id": "SCAN-002",
+      "signature_name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "cwe": null,
+      "payload": "python-requests/2.31.0"
+    },
+    {
+      "line": 62,
+      "ip": "89.248.165.74",
+      "timestamp": "2026-10-20T18:05:00+00:00",
+      "method": "GET",
+      "path": "/",
+      "status": 200,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)"
+    },
+    {
+      "line": 63,
+      "ip": "198.51.100.23",
+      "timestamp": "2026-10-20T18:12:00+00:00",
+      "method": "GET",
+      "path": "/admin",
+      "status": 404,
+      "signature_id": "SCAN-001",
+      "signature_name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "cwe": null,
+      "payload": "Mozilla/5.0 (compatible; Nikto/2.5.0)"
+    }
+  ],
+  "brute_force": [
+    {
+      "ip": "203.0.113.50",
+      "type": "brute_force",
+      "severity": "high",
+      "signature_id": "BF-001",
+      "signature_name": "Brute force authentication",
+      "failed_attempts": 12,
+      "threshold": 5,
+      "first_seen": "2026-10-20T16:00:00+00:00",
+      "last_seen": "2026-10-20T16:05:20+00:00",
+      "target_paths": [
+        "/login.php"
+      ],
+      "country_code": "US",
+      "country": "United States",
+      "city": "Ashburn",
+      "lat": 39.0438,
+      "lon": -77.4874,
+      "flag": "\ud83c\uddfa\ud83c\uddf8"
+    },
+    {
+      "ip": "192.0.2.44",
+      "type": "brute_force",
+      "severity": "high",
+      "signature_id": "BF-001",
+      "signature_name": "Brute force authentication",
+      "failed_attempts": 8,
+      "threshold": 5,
+      "first_seen": "2026-10-20T21:00:00+00:00",
+      "last_seen": "2026-10-20T21:28:00+00:00",
+      "target_paths": [
+        "/wp-login.php"
+      ],
+      "country_code": "CN",
+      "country": "China",
+      "city": "Beijing",
+      "lat": 39.9042,
+      "lon": 116.4074,
+      "flag": "\ud83c\udde8\ud83c\uddf3"
+    }
+  ],
+  "attacks_by_ip": [
+    {
+      "ip": "45.155.205.233",
+      "hits": 24,
+      "worst_severity": "critical",
+      "attack_types": {
+        "sql_injection": 12,
+        "scanner": 12
+      },
+      "first_seen": "2026-10-20T03:00:00+00:00",
+      "last_seen": "2026-10-20T05:21:00+00:00",
+      "country_code": "RU",
+      "country": "Russia",
+      "city": "Moscow",
+      "lat": 55.7558,
+      "lon": 37.6173,
+      "flag": "\ud83c\uddf7\ud83c\uddfa"
+    },
+    {
+      "ip": "203.0.113.50",
+      "hits": 24,
+      "worst_severity": "high",
+      "attack_types": {
+        "scanner": 12,
+        "brute_force": 12
+      },
+      "first_seen": "2026-10-20T16:00:00+00:00",
+      "last_seen": "2026-10-20T16:05:20+00:00",
+      "country_code": "US",
+      "country": "United States",
+      "city": "Ashburn",
+      "lat": 39.0438,
+      "lon": -77.4874,
+      "flag": "\ud83c\uddfa\ud83c\uddf8"
+    },
+    {
+      "ip": "185.220.101.7",
+      "hits": 18,
+      "worst_severity": "critical",
+      "attack_types": {
+        "path_traversal": 12,
+        "scanner": 6
+      },
+      "first_seen": "2026-10-20T12:22:00+00:00",
+      "last_seen": "2026-10-20T13:16:00+00:00",
+      "country_code": "NL",
+      "country": "Netherlands",
+      "city": "Amsterdam",
+      "lat": 52.3676,
+      "lon": 4.9041,
+      "flag": "\ud83c\uddf3\ud83c\uddf1"
+    },
+    {
+      "ip": "192.0.2.44",
+      "hits": 8,
+      "worst_severity": "high",
+      "attack_types": {
+        "brute_force": 8
+      },
+      "first_seen": null,
+      "last_seen": null,
+      "country_code": "CN",
+      "country": "China",
+      "city": "Beijing",
+      "lat": 39.9042,
+      "lon": 116.4074,
+      "flag": "\ud83c\udde8\ud83c\uddf3"
+    },
+    {
+      "ip": "103.21.244.12",
+      "hits": 3,
+      "worst_severity": "high",
+      "attack_types": {
+        "xss": 3
+      },
+      "first_seen": "2026-10-20T08:42:00+00:00",
+      "last_seen": "2026-10-20T10:26:00+00:00",
+      "country_code": "IN",
+      "country": "India",
+      "city": "Mumbai",
+      "lat": 19.076,
+      "lon": 72.8777,
+      "flag": "\ud83c\uddee\ud83c\uddf3"
+    },
+    {
+      "ip": "89.248.165.74",
+      "hits": 1,
+      "worst_severity": "medium",
+      "attack_types": {
+        "scanner": 1
+      },
+      "first_seen": "2026-10-20T18:05:00+00:00",
+      "last_seen": "2026-10-20T18:05:00+00:00",
+      "country_code": "NL",
+      "country": "Netherlands",
+      "city": "Amsterdam",
+      "lat": 52.3676,
+      "lon": 4.9041,
+      "flag": "\ud83c\uddf3\ud83c\uddf1"
+    },
+    {
+      "ip": "198.51.100.23",
+      "hits": 1,
+      "worst_severity": "medium",
+      "attack_types": {
+        "scanner": 1
+      },
+      "first_seen": "2026-10-20T18:12:00+00:00",
+      "last_seen": "2026-10-20T18:12:00+00:00",
+      "country_code": "DE",
+      "country": "Germany",
+      "city": "Frankfurt",
+      "lat": 50.1109,
+      "lon": 8.6821,
+      "flag": "\ud83c\udde9\ud83c\uddea"
+    }
+  ],
+  "top_attackers": [
+    {
+      "ip": "45.155.205.233",
+      "hits": 24,
+      "worst_severity": "critical",
+      "attack_types": {
+        "sql_injection": 12,
+        "scanner": 12
+      },
+      "first_seen": "2026-10-20T03:00:00+00:00",
+      "last_seen": "2026-10-20T05:21:00+00:00",
+      "country_code": "RU",
+      "country": "Russia",
+      "city": "Moscow",
+      "lat": 55.7558,
+      "lon": 37.6173,
+      "flag": "\ud83c\uddf7\ud83c\uddfa"
+    },
+    {
+      "ip": "203.0.113.50",
+      "hits": 24,
+      "worst_severity": "high",
+      "attack_types": {
+        "scanner": 12,
+        "brute_force": 12
+      },
+      "first_seen": "2026-10-20T16:00:00+00:00",
+      "last_seen": "2026-10-20T16:05:20+00:00",
+      "country_code": "US",
+      "country": "United States",
+      "city": "Ashburn",
+      "lat": 39.0438,
+      "lon": -77.4874,
+      "flag": "\ud83c\uddfa\ud83c\uddf8"
+    },
+    {
+      "ip": "185.220.101.7",
+      "hits": 18,
+      "worst_severity": "critical",
+      "attack_types": {
+        "path_traversal": 12,
+        "scanner": 6
+      },
+      "first_seen": "2026-10-20T12:22:00+00:00",
+      "last_seen": "2026-10-20T13:16:00+00:00",
+      "country_code": "NL",
+      "country": "Netherlands",
+      "city": "Amsterdam",
+      "lat": 52.3676,
+      "lon": 4.9041,
+      "flag": "\ud83c\uddf3\ud83c\uddf1"
+    },
+    {
+      "ip": "192.0.2.44",
+      "hits": 8,
+      "worst_severity": "high",
+      "attack_types": {
+        "brute_force": 8
+      },
+      "first_seen": null,
+      "last_seen": null,
+      "country_code": "CN",
+      "country": "China",
+      "city": "Beijing",
+      "lat": 39.9042,
+      "lon": 116.4074,
+      "flag": "\ud83c\udde8\ud83c\uddf3"
+    },
+    {
+      "ip": "103.21.244.12",
+      "hits": 3,
+      "worst_severity": "high",
+      "attack_types": {
+        "xss": 3
+      },
+      "first_seen": "2026-10-20T08:42:00+00:00",
+      "last_seen": "2026-10-20T10:26:00+00:00",
+      "country_code": "IN",
+      "country": "India",
+      "city": "Mumbai",
+      "lat": 19.076,
+      "lon": 72.8777,
+      "flag": "\ud83c\uddee\ud83c\uddf3"
+    },
+    {
+      "ip": "89.248.165.74",
+      "hits": 1,
+      "worst_severity": "medium",
+      "attack_types": {
+        "scanner": 1
+      },
+      "first_seen": "2026-10-20T18:05:00+00:00",
+      "last_seen": "2026-10-20T18:05:00+00:00",
+      "country_code": "NL",
+      "country": "Netherlands",
+      "city": "Amsterdam",
+      "lat": 52.3676,
+      "lon": 4.9041,
+      "flag": "\ud83c\uddf3\ud83c\uddf1"
+    },
+    {
+      "ip": "198.51.100.23",
+      "hits": 1,
+      "worst_severity": "medium",
+      "attack_types": {
+        "scanner": 1
+      },
+      "first_seen": "2026-10-20T18:12:00+00:00",
+      "last_seen": "2026-10-20T18:12:00+00:00",
+      "country_code": "DE",
+      "country": "Germany",
+      "city": "Frankfurt",
+      "lat": 50.1109,
+      "lon": 8.6821,
+      "flag": "\ud83c\udde9\ud83c\uddea"
+    }
+  ],
+  "by_hour": [
+    {
+      "hour": "2026-10-20 00:00",
+      "attacks": 0,
+      "requests": 1
+    },
+    {
+      "hour": "2026-10-20 01:00",
+      "attacks": 0,
+      "requests": 1
+    },
+    {
+      "hour": "2026-10-20 02:00",
+      "attacks": 0,
+      "requests": 1
+    },
+    {
+      "hour": "2026-10-20 03:00",
+      "attacks": 8,
+      "requests": 6
+    },
+    {
+      "hour": "2026-10-20 04:00",
+      "attacks": 8,
+      "requests": 5
+    },
+    {
+      "hour": "2026-10-20 05:00",
+      "attacks": 8,
+      "requests": 6
+    },
+    {
+      "hour": "2026-10-20 06:00",
+      "attacks": 0,
+      "requests": 2
+    },
+    {
+      "hour": "2026-10-20 07:00",
+      "attacks": 0,
+      "requests": 1
+    },
+    {
+      "hour": "2026-10-20 08:00",
+      "attacks": 1,
+      "requests": 2
+    },
+    {
+      "hour": "2026-10-20 09:00",
+      "attacks": 1,
+      "requests": 2
+    },
+    {
+      "hour": "2026-10-20 10:00",
+      "attacks": 1,
+      "requests": 3
+    },
+    {
+      "hour": "2026-10-20 11:00",
+      "attacks": 0,
+      "requests": 2
+    },
+    {
+      "hour": "2026-10-20 12:00",
+      "attacks": 9,
+      "requests": 5
+    },
+    {
+      "hour": "2026-10-20 13:00",
+      "attacks": 9,
+      "requests": 5
+    },
+    {
+      "hour": "2026-10-20 14:00",
+      "attacks": 0,
+      "requests": 2
+    },
+    {
+      "hour": "2026-10-20 15:00",
+      "attacks": 0,
+      "requests": 2
+    },
+    {
+      "hour": "2026-10-20 16:00",
+      "attacks": 24,
+      "requests": 13
+    },
+    {
+      "hour": "2026-10-20 17:00",
+      "attacks": 0,
+      "requests": 1
+    },
+    {
+      "hour": "2026-10-20 18:00",
+      "attacks": 2,
+      "requests": 3
+    },
+    {
+      "hour": "2026-10-20 19:00",
+      "attacks": 0,
+      "requests": 2
+    },
+    {
+      "hour": "2026-10-20 20:00",
+      "attacks": 0,
+      "requests": 1
+    },
+    {
+      "hour": "2026-10-20 21:00",
+      "attacks": 8,
+      "requests": 10
+    },
+    {
+      "hour": "2026-10-20 22:00",
+      "attacks": 0,
+      "requests": 1
+    },
+    {
+      "hour": "2026-10-20 23:00",
+      "attacks": 0,
+      "requests": 1
+    }
+  ],
+  "most_targeted": [
+    {
+      "path": "/login.php",
+      "hits": 12
+    },
+    {
+      "path": "/product.php?id=1%20AND%20SLEEP(5)",
+      "hits": 10
+    },
+    {
+      "path": "/product.php?id=1'%20OR%20'1'='1",
+      "hits": 6
+    },
+    {
+      "path": "/product.php?id=1%20UNION%20SELECT%20username,password%20FROM%20users",
+      "hits": 6
+    },
+    {
+      "path": "/download?file=../../../../etc/passwd",
+      "hits": 6
+    },
+    {
+      "path": "/download?file=..%2f..%2f..%2fetc%2fpasswd",
+      "hits": 6
+    },
+    {
+      "path": "/download?file=....//....//windows/win.ini",
+      "hits": 6
+    },
+    {
+      "path": "/product.php?id=1';%20DROP%20TABLE%20users;--",
+      "hits": 2
+    },
+    {
+      "path": "/search?q=javascript:alert(document.cookie)",
+      "hits": 2
+    },
+    {
+      "path": "/search?q=<script>alert('xss')</script>",
+      "hits": 1
+    }
+  ],
+  "errors": [
+    {
+      "line": 79,
+      "text": "this is not a log line at all"
+    }
+  ],
+  "by_country": [
+    {
+      "country_code": "RU",
+      "country": "Russia",
+      "hits": 24,
+      "ip_count": 1,
+      "flag": "\ud83c\uddf7\ud83c\uddfa"
+    },
+    {
+      "country_code": "US",
+      "country": "United States",
+      "hits": 24,
+      "ip_count": 1,
+      "flag": "\ud83c\uddfa\ud83c\uddf8"
+    },
+    {
+      "country_code": "NL",
+      "country": "Netherlands",
+      "hits": 19,
+      "ip_count": 2,
+      "flag": "\ud83c\uddf3\ud83c\uddf1"
+    },
+    {
+      "country_code": "CN",
+      "country": "China",
+      "hits": 8,
+      "ip_count": 1,
+      "flag": "\ud83c\udde8\ud83c\uddf3"
+    },
+    {
+      "country_code": "IN",
+      "country": "India",
+      "hits": 3,
+      "ip_count": 1,
+      "flag": "\ud83c\uddee\ud83c\uddf3"
+    },
+    {
+      "country_code": "DE",
+      "country": "Germany",
+      "hits": 1,
+      "ip_count": 1,
+      "flag": "\ud83c\udde9\ud83c\uddea"
+    }
+  ],
+  "meta": {
+    "report_id": "718dc14d95",
+    "filename": "demo_attacks.log (bundled)",
+    "generated_at": "2026-11-02T09:43:48+00:00",
+    "elapsed_seconds": 0.08,
+    "engine": "streaming"
+  }
+}

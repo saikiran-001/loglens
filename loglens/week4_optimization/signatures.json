@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "description": "LogLens attack signature database. Each rule is a regular expression matched against a decoded request path or the User-Agent. 'severity' is one of: critical, high, medium, low.",
+  "signatures": [
+    {
+      "id": "SQLI-001",
+      "name": "SQL injection - tautology",
+      "type": "sql_injection",
+      "severity": "critical",
+      "target": "path",
+      "cwe": "CWE-89",
+      "pattern": "'\\s*(?:or|and)\\s+'?\\d+'?\\s*=\\s*'?\\d",
+      "description": "Classic ' OR 1=1 style payload that makes a WHERE clause always true."
+    },
+    {
+      "id": "SQLI-002",
+      "name": "SQL injection - UNION SELECT",
+      "type": "sql_injection",
+      "severity": "critical",
+      "target": "path",
+      "cwe": "CWE-89",
+      "pattern": "\\bunion\\b[\\s+]+(?:all[\\s+]+)?\\bselect\\b",
+      "description": "Attempts to append a second result set to the original query."
+    },
+    {
+      "id": "SQLI-003",
+      "name": "SQL injection - stacked query",
+      "type": "sql_injection",
+      "severity": "critical",
+      "target": "path",
+      "cwe": "CWE-89",
+      "pattern": ";\\s*(?:drop|delete|insert|update|truncate|alter)\\b",
+      "description": "A semicolon followed by a destructive SQL keyword."
+    },
+    {
+      "id": "SQLI-004",
+      "name": "SQL injection - time based",
+      "type": "sql_injection",
+      "severity": "high",
+      "target": "path",
+      "cwe": "CWE-89",
+      "pattern": "\\b(?:sleep|benchmark|pg_sleep)\\s*\\(|\\bwaitfor\\s+delay\\b",
+      "description": "Blind injection that proves itself by delaying the database."
+    },
+    {
+      "id": "XSS-001",
+      "name": "Cross-site scripting - script tag",
+      "type": "xss",
+      "severity": "high",
+      "target": "path",
+      "cwe": "CWE-79",
+      "pattern": "<\\s*script\\b",
+      "description": "Injected <script> element."
+    },
+    {
+      "id": "XSS-002",
+      "name": "Cross-site scripting - event handler",
+      "type": "xss",
+      "severity": "high",
+      "target": "path",
+      "cwe": "CWE-79",
+      "pattern": "\\bon(?:error|load|mouseover|focus|click|animationstart)\\s*=",
+      "description": "Inline JavaScript such as onerror=alert(1)."
+    },
+    {
+      "id": "XSS-003",
+      "name": "Cross-site scripting - javascript: URI",
+      "type": "xss",
+      "severity": "medium",
+      "target": "path",
+      "cwe": "CWE-79",
+      "pattern": "javascript\\s*:",
+      "description": "A javascript: pseudo-protocol in a link or redirect parameter."
+    },
+    {
+      "id": "TRAV-001",
+      "name": "Path traversal - dot-dot-slash",
+      "type": "path_traversal",
+      "severity": "high",
+      "target": "path",
+      "cwe": "CWE-22",
+      "pattern": "\\.\\.[/\\\\]",
+      "description": "Climbing out of the web root with ../ or ..\\ ."
+    },
+    {
+      "id": "TRAV-002",
+      "name": "Path traversal - sensitive file",
+      "type": "path_traversal",
+      "severity": "critical",
+      "target": "path",
+      "cwe": "CWE-22",
+      "pattern": "(?:/etc/passwd|/etc/shadow|/proc/self/environ|/win\\.ini|/boot\\.ini|windows/system32)",
+      "description": "Direct request for an operating-system file."
+    },
+    {
+      "id": "TRAV-003",
+      "name": "Path traversal - double encoded",
+      "type": "path_traversal",
+      "severity": "high",
+      "target": "path",
+      "cwe": "CWE-22",
+      "pattern": "%25(?:2e|2f|5c)",
+      "description": "Double URL encoding, used to slip past naive filters."
+    },
+    {
+      "id": "SCAN-001",
+      "name": "Automated scanner - known tool",
+      "type": "scanner",
+      "severity": "medium",
+      "target": "user_agent",
+      "pattern": "(?:sqlmap|nikto|nmap|masscan|acunetix|nessus|openvas|dirbuster|gobuster|wfuzz|zgrab|nuclei|wpscan)",
+      "description": "User-Agent announces a penetration-testing tool."
+    },
+    {
+      "id": "SCAN-002",
+      "name": "Scripted client",
+      "type": "scanner",
+      "severity": "low",
+      "target": "user_agent",
+      "pattern": "(?:curl/|wget/|python-requests|go-http-client|libwww-perl|okhttp)",
+      "description": "Command-line HTTP client - suspicious for a normal visitor."
+    },
+    {
+      "id": "SENS-001",
+      "name": "Sensitive file probe",
+      "type": "sensitive_file",
+      "severity": "high",
+      "target": "path",
+      "cwe": "CWE-538",
+      "pattern": "(?:\\.env|\\.git/config|\\.aws/credentials|wp-config\\.php|phpinfo\\.php|adminer\\.php|/backup\\.(?:sql|zip|tar))",
+      "description": "Requests for secrets or backup files that should never be web-accessible."
+    },
+    {
+      "id": "CMD-001",
+      "name": "Command injection",
+      "type": "command_injection",
+      "severity": "critical",
+      "target": "path",
+      "cwe": "CWE-78",
+      "pattern": "(?:[;|]\\s*(?:cat|ls|id|whoami|uname|curl|wget|nc)\\b|\\$\\([^)]*\\))",
+      "description": "Shell metacharacters chained to a system command."
+    },
+    {
+      "id": "LOG4J-001",
+      "name": "Log4Shell JNDI lookup",
+      "type": "exploit_attempt",
+      "severity": "critical",
+      "target": "any",
+      "cwe": "CWE-502",
+      "pattern": "\\$\\{jndi:",
+      "description": "The Log4j 2021 remote-code-execution payload."
+    }
+  ],
+  "brute_force": {
+    "status_codes": [401, 403],
+    "threshold": 5,
+    "window_minutes": 10,
+    "description": "N or more failed authentication responses from one IP inside the window."
+  }
+}

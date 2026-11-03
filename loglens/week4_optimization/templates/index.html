@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--
+  week4_optimization/templates/index.html
+  ------------------------------------------------------------------
+  Upload page for the final app.
+
+  The form is handled by static/app.js instead of a normal submit:
+    1. XHR uploads the file (real upload progress bar)
+    2. POST /analyze returns { job_id } immediately
+    3. JS polls /api/jobs/<id> twice a second
+    4. On "done" the browser is redirected to /report/<id>
+
+  Without JavaScript the form still POSTs, but /analyze answers with
+  JSON. That is acceptable here because the whole point of this page is
+  a live progress bar; /job/<id> exists as the no-JS fallback page.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LogLens · Week 4 · Final</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◉</span> LogLens
+      <span class="badge">Week 4 · Final</span>
+    </div>
+    <nav>
+      <a href="http://127.0.0.1:5001">1 Parser</a>
+      <a href="http://127.0.0.1:5002">2 Detection</a>
+      <a href="http://127.0.0.1:5003">3 Dashboard</a>
+      <a class="active" href="http://127.0.0.1:5004">4 Final</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}{% for message in messages %}<div class="alert">{{ message }}</div>{% endfor %}{% endif %}
+    {% endwith %}
+
+    <section class="card">
+      <h1>LogLens · security log analysis</h1>
+      <p class="muted">
+        Streaming parser · 15 regex signatures · brute-force detection ·
+        GeoIP map · async job queue. Upload limit: {{ max_upload_mb }} MB.
+      </p>
+
+      <!-- data-* attributes let app.js read config without inline JS -->
+      <form id="upload-form" action="{{ url_for('analyze') }}" method="post"
+            enctype="multipart/form-data" data-demo-url="{{ url_for('demo') }}">
+
+        <label class="drop" for="logfile">
+          <input id="logfile" type="file" name="logfile" accept=".log,.txt" />
+          <span class="drop-text">Choose a .log file — or drag it onto this box</span>
+        </label>
+
+        <div class="row">
+          <label class="field">
+            <span>Brute-force threshold (failed logins per IP)</span>
+            <input type="number" name="threshold" min="2" max="100" value="5" />
+          </label>
+          <button type="submit" class="btn" id="submit-btn">Analyse</button>
+          <button type="button" class="btn ghost" id="demo-btn">Load demo log</button>
+        </div>
+      </form>
+
+      <!-- Progress panel: hidden until a job starts -->
+      <div id="progress-panel" class="progress-panel" hidden>
+        <div class="progress-head">
+          <span id="progress-status">Starting…</span>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+        <p class="hint" id="progress-hint">
+          You can leave this tab open — the report opens automatically when ready.
+        </p>
+      </div>
+
+      <div id="error-panel" class="alert" hidden></div>
+    </section>
+
+    {% if recent %}
+    <section class="card">
+      <h2>Recent analyses</h2>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Job</th><th>File</th><th>Status</th><th>Lines</th><th>Incidents</th><th>Took</th><th></th></tr>
+          </thead>
+          <tbody>
+            {% for job in recent %}
+            <tr>
+              <td><code>{{ job.id }}</code></td>
+              <td>{{ job.filename }}</td>
+              <td>
+                <span class="pill pill-{{ job.status }}">{{ job.status }}</span>
+              </td>
+              <td>{{ job.summary.total_lines if job.summary else "-" }}</td>
+              <td>{{ job.summary.incidents if job.summary else "-" }}</td>
+              <td class="muted">{{ job.elapsed_seconds ~ "s" if job.elapsed_seconds else "-" }}</td>
+              <td>
+                {% if job.status == "done" %}
+                  <a class="link" href="{{ url_for('report_view', report_id=job.id) }}">Report →</a>
+                {% elif job.status == "error" %}
+                  <span class="sev-high" title="{{ job.error }}">failed</span>
+                {% else %}
+                  <span class="muted">{{ job.progress }}%</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="card">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><b>Upload</b> — the file streams to disk in chunks, never into RAM.</li>
+        <li><b>Job id</b> — the server answers immediately with an id and a status URL.</li>
+        <li><b>Poll</b> — the browser asks for progress twice a second.</li>
+        <li><b>Report</b> — parse → detect → aggregate → GeoIP, then a dashboard.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="foot">LogLens · Week 4 of 4 · streaming + job queue + export + deployment</footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
